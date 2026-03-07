@@ -8,15 +8,11 @@ using namespace std;
 struct money {
     int grn;
     short int kop;
-
-    money operator+(const money& other) const;
-    money operator*(int n) const;
 };
+
+money sum(money a, money b);
+money multi(money m, int n);
 
 money round(const money& m);
 vector<string> parseLines(const char*);
 money parseLine(const string& line);
-
-
-
-

@@ -6,18 +6,17 @@
  #include <cctype>
 
  using namespace std;
-
- money money::operator+(const money& other) const {
+ 
+ money sum(money a, money b) {
 
     money result;
-
-    int total_grn = this->grn + other.grn;
-    short int total_kop = this->kop + other.kop;
+    
+    int total_grn = a.grn + b.grn;
+    short int total_kop = a.kop + b.kop;
 
     int all_kop = total_grn * 100 + total_kop;
 
     int result_grn = all_kop / 100;
-
     int result_kop = all_kop - result_grn * 100;
 
     result.grn = result_grn;
@@ -26,13 +25,14 @@
     return result;
  }
 
- money money::operator*(int n) const {
+ money multi(money m, int n) {
 
     money result;
-    int grn = this->grn * n;
-    int kop = this->kop * n;
+
+    int grn = m.grn * n;
+    int kop = m.kop * n;
     int total_kop = grn * 100 + kop;
-    
+
     int result_grn = total_kop / 100;
     int result_kop = total_kop - result_grn * 100;
 
@@ -132,7 +132,7 @@ money parseLine(const string& line) {
     }
 
     if (quantity > 1) {
-        return m * quantity;
+        return multi(m, quantity);
     }
     return m;
 }

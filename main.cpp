@@ -38,7 +38,7 @@ int main() {
 
         cout << "parsed line: { grn: " << parseMoney.grn << ", kop: " << parseMoney.kop << " }" << endl;
 
-        totalMoney = totalMoney + parseMoney;
+        totalMoney = sum(totalMoney , parseMoney);
     }
 
     money finalMoney = round(totalMoney);

@@ -5,16 +5,14 @@
 using namespace std;
 
 void sum(money *a, money b) {
-  if (!a)
-    return;
+
   int total_kop = (a->grn + b.grn) * 100 + a->kop + b.kop;
   a->grn = total_kop / 100;
   a->kop = total_kop % 100;
 }
 
 void multi(money *m, int n) {
-  if (!m)
-    return;
+
   int total_kop = (m->grn * 100 + m->kop) * n;
   m->grn = total_kop / 100;
   m->kop = total_kop % 100;
@@ -88,7 +86,9 @@ void parseLines(const char *file_name) {
   cout << endl
        << "sum not round: { grn: " << total_money.grn
        << ", kop: " << total_money.kop << " }" << endl;
+
   round(&total_money);
+
   cout << endl
        << "Full receipt amount: { grn: " << total_money.grn
        << ", kop: " << total_money.kop << " }" << endl;

@@ -20,42 +20,24 @@ void multi(money *m, int n) {
   m->kop = total_kop % 100;
 }
 
-money round(const money& m) {
+void round(money *m) {
 
-    money result;
+  int mod = m->kop % 10;
 
-    short int secondDigit = m.kop % 10;
+  if (mod >= 5) {
 
-    if (secondDigit == 0)
-    { 
-        result.grn = m.grn;
-        result.kop = m.kop;
+    m->kop += (10 - mod);
 
-        return result; 
+    if (m->kop >= 100) {
+
+      m->grn += 1;
+      m->kop -= 100;
     }
 
-    if(secondDigit % 10 >= 5) {
-        
-        if(m.kop > 94) {
-            result.grn = m.grn + 1;
-            result.kop = 0;
-            return result;
-        }
-        else {
-
-            result.grn = m.grn;
-            result.kop = m.kop + ( 10 - secondDigit );
-            return result;
-        }
-    } 
-    else {
-
-        result.grn = m.grn;
-        result.kop = m.kop - secondDigit; 
-
-        return result;
-    }
- }
+  } else {
+    m->kop -= mod;
+  }
+}
 
 void parseLines(const char *file_name) {
 
@@ -77,32 +59,37 @@ void parseLines(const char *file_name) {
   while (fgets(buffer, sizeof(buffer), f)) {
 
     quantity = 1;
-    int parseItemsCount = sscanf(buffer, "%255s %d %hd %d", item, &grn, &kop, &quantity);
+    int parseItemsCount =
+        sscanf(buffer, "%255s %d %hd %d", item, &grn, &kop, &quantity);
 
     if (parseItemsCount >= 3) {
 
-        if (quantity < 0 || grn < 0 || kop < 0) {
-            cout << "Incorrect format of input" << endl;
-            fclose(f);
-            return;
-        }
+      if (quantity < 0 || grn < 0 || kop < 0) {
+        cout << "Incorrect format of input" << endl;
+        fclose(f);
+        return;
+      }
 
-        money m = {grn, kop};
+      money m = {grn, kop};
 
-        if (quantity > 1) {
-            multi(&m, quantity);
-        }
+      if (quantity > 1) {
+        multi(&m, quantity);
+      }
 
-        cout << item << " " << grn << " grn, " << kop << " kop, " << quantity << "x" << endl;
+      cout << item << " " << grn << " grn, " << kop << " kop, " << quantity
+           << "x" << endl;
 
-        sum(&total_money, m);
+      sum(&total_money, m);
     }
   }
 
   fclose(f);
 
-  cout << endl << "sum not round: { grn: " << total_money.grn << ", kop: " << total_money.kop << " }" << endl;
-  money final_money = round(total_money);
-  cout << endl << "Full receipt amount: { grn: " << final_money.grn
-       << ", kop: " << final_money.kop << " }" << endl;
+  cout << endl
+       << "sum not round: { grn: " << total_money.grn
+       << ", kop: " << total_money.kop << " }" << endl;
+  round(&total_money);
+  cout << endl
+       << "Full receipt amount: { grn: " << total_money.grn
+       << ", kop: " << total_money.kop << " }" << endl;
 }

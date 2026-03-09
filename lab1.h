@@ -9,7 +9,7 @@ struct money {
 void sum(money *a, money b);
 void multi(money *m, int n);
 
-money round(const money &m);
+void round(money *m);
 void parseLines(const char *file_name);
 
 #endif

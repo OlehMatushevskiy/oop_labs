@@ -101,6 +101,7 @@ void parseLines(const char *file_name) {
 
   fclose(f);
 
+  cout << endl << "sum not round: { grn: " << total_money.grn << ", kop: " << total_money.kop << " }" << endl;
   money final_money = round(total_money);
   cout << endl << "Full receipt amount: { grn: " << final_money.grn
        << ", kop: " << final_money.kop << " }" << endl;

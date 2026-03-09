@@ -1,48 +1,26 @@
+#include "lab1.h"
+#include <cstdio>
+#include <iostream>
 
- #include "lab1.h"
- #include <string> 
- #include <vector>
- #include <iostream>
- #include <cctype>
+using namespace std;
 
- using namespace std;
- 
- money sum(money a, money b) {
+void sum(money *a, money b) {
+  if (!a)
+    return;
+  int total_kop = (a->grn + b.grn) * 100 + a->kop + b.kop;
+  a->grn = total_kop / 100;
+  a->kop = total_kop % 100;
+}
 
-    money result;
-    
-    int total_grn = a.grn + b.grn;
-    short int total_kop = a.kop + b.kop;
+void multi(money *m, int n) {
+  if (!m)
+    return;
+  int total_kop = (m->grn * 100 + m->kop) * n;
+  m->grn = total_kop / 100;
+  m->kop = total_kop % 100;
+}
 
-    int all_kop = total_grn * 100 + total_kop;
-
-    int result_grn = all_kop / 100;
-    int result_kop = all_kop - result_grn * 100;
-
-    result.grn = result_grn;
-    result.kop = result_kop;
-
-    return result;
- }
-
- money multi(money m, int n) {
-
-    money result;
-
-    int grn = m.grn * n;
-    int kop = m.kop * n;
-    int total_kop = grn * 100 + kop;
-
-    int result_grn = total_kop / 100;
-    int result_kop = total_kop - result_grn * 100;
-
-    result.grn = result_grn;
-    result.kop = result_kop;
-
-    return result;
- }
-
- money round(const money& m) {
+money round(const money& m) {
 
     money result;
 
@@ -79,60 +57,51 @@
     }
  }
 
-vector<string> parseLines(const char* file_name) {
+void parseLines(const char *file_name) {
 
-    vector<string> all_lines;
+  FILE *f = fopen(file_name, "r");
 
-    FILE *f = fopen(file_name,"r");
-    
-    if (f == NULL) { return all_lines; }
+  if (f == NULL) {
+    cout << "Could not open file" << endl;
+    return;
+  }
 
-    char buffer[256];
+  char buffer[256];
+  int grn;
+  short int kop;
+  int quantity;
+  char item[256];
 
-    while (fgets(buffer, sizeof(buffer), f)) {
-        all_lines.push_back(string(buffer));
-    }
+  money total_money = {0, 0};
 
-    fclose(f);
+  while (fgets(buffer, sizeof(buffer), f)) {
 
-    return all_lines;
-}
+    quantity = 1;
+    int parseItemsCount = sscanf(buffer, "%255s %d %hd %d", item, &grn, &kop, &quantity);
 
-money parseLine(const string& line) {
-    money m = { 0, 0 };
-    int current_number = 0;
-    int quantity = 1;
+    if (parseItemsCount >= 3) {
 
-    for (size_t i = 0; i < line.length(); ++i) {
-
-        if (isdigit(line[i])) {
-            size_t start = i;
-            while (i < line.length() && isdigit(line[i])) {
-                i++;
-            }
-
-            current_number = std::stoi(line.substr(start, i - start));
-
-            while (i < line.length() && isspace(line[i])) {
-                i++;
-            }
-
-            string tail = line.substr(i, 10); 
-
-            if (tail.find("грн") == 0 || tail.find("grn") == 0) {
-                m.grn = current_number;
-            } 
-            else if (tail.find("коп") == 0 || tail.find("kop") == 0) {
-                m.kop = (short)current_number;
-            } 
-            else if (tail.find("шт") == 0 || tail.find("x") == 0) {
-                quantity = current_number;
-            }
+        if (quantity < 0 || grn < 0 || kop < 0) {
+            cout << "Incorrect format of input" << endl;
+            fclose(f);
+            return;
         }
-    }
 
-    if (quantity > 1) {
-        return multi(m, quantity);
+        money m = {grn, kop};
+
+        if (quantity > 1) {
+            multi(&m, quantity);
+        }
+
+        cout << item << " " << grn << " grn, " << kop << " kop, " << quantity << "x" << endl;
+
+        sum(&total_money, m);
     }
-    return m;
+  }
+
+  fclose(f);
+
+  money final_money = round(total_money);
+  cout << endl << "Full receipt amount: { grn: " << final_money.grn
+       << ", kop: " << final_money.kop << " }" << endl;
 }

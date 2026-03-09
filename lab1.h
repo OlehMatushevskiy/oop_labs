@@ -1,7 +1,7 @@
 #include <iostream> 
 #include <vector>
 #include <string>
- #include <cctype>
+#include <cctype>
 
 using namespace std;
 

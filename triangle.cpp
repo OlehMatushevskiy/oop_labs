@@ -44,6 +44,7 @@ int Triangle::checkPointPosition(const Point &P) const {
 
     if (checkBorderDegenerate(A, B, P) || checkBorderDegenerate(B, C, P) ||
         checkBorderDegenerate(C, A, P)) {
+          
       return 2; // на межі
     }
 

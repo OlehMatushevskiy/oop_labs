@@ -25,7 +25,6 @@ int main() {
 
   if (t.isDegenerate()) {
     cout << "Трикутник вироджений , площа дорівнює 0" << endl;
-    return 0;
   }
 
   cout << "\nВийшов трикутник з вершинами: { " << t.A.x << " , " << t.A.y
@@ -44,19 +43,33 @@ int main() {
       break;
     }
 
-    int pos = t.checkPointPosition1(p);
+
+    int pos_s = t.checkPointPosition(p);
+    int pos_v = t.checkPointPosition1(p);
     cout << "Точка { " << p.x << " , " << p.y << " } лежить ";
 
-    switch (pos) {
-    case 0:
-      cout << "всередині трикутника" << endl;
-      break;
-    case 1:
-      cout << "десь ззовні трикутника" << endl;
-      break;
-    case 2:
-      cout << "на межі трикутника" << endl;
-      break;
+    switch (pos_s) {
+      case 0:
+        cout << "всередині трикутника ( площа )" << endl;
+        break;
+      case 1:
+        cout << "десь ззовні трикутника ( площа )" << endl;
+        break;
+      case 2:
+        cout << "на межі трикутника ( площа )" << endl;
+        break;
+    }
+
+    switch (pos_v) {
+      case 0:
+        cout << "всередині трикутника ( вектор )" << endl;
+        break;
+      case 1:
+        cout << "десь ззовні трикутника ( вектор )" << endl;
+        break;
+      case 2:
+        cout << "на межі трикутника ( вектор )" << endl;
+        break;
     }
   }
 

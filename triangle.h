@@ -27,5 +27,6 @@ struct Triangle {
   int checkPointPosition1(const Point &P) const;
 };
 
+bool checkBorderDegenerate(const Point& p1, const Point& p2, const Point& p);
 double cross(const Point &A, const Point &B, const Point &P);
 double heronArea(const Triangle &t);

@@ -28,12 +28,29 @@ double Triangle::area() const { return heronArea(*this); }
 
 bool Triangle::isDegenerate() const { return area() < 1e-9; }
 
+bool checkBorderDegenerate(const Point &a, const Point &b, const Point &p) {
+
+  const double EPSILON = 1e-9;
+
+  return fabs(distance(a, p) + distance(p, b) - distance(a, b)) < EPSILON;
+}
+
 // 0 - всередині, 1 - десь ззовні, 2 - на межі трикутника
 int Triangle::checkPointPosition(const Point &P) const {
 
-  // метод площ
-
   const double EPSILON = 1e-9;
+
+  if (isDegenerate()) {
+
+    if (checkBorderDegenerate(A, B, P) || checkBorderDegenerate(B, C, P) ||
+        checkBorderDegenerate(C, A, P)) {
+      return 2; // на межі
+    }
+
+    return 1; // ззовні
+  }
+
+  // метод площ
 
   Triangle t0 = {A, B, C};
 
@@ -63,20 +80,31 @@ int Triangle::checkPointPosition(const Point &P) const {
 
 int Triangle::checkPointPosition1(const Point &P) const {
 
+  const double EPSILON = 1e-9;
+
+  if (isDegenerate()) {
+    if (checkBorderDegenerate(A, B, P) || checkBorderDegenerate(B, C, P) ||
+        checkBorderDegenerate(C, A, P)) {
+      return 2; // на межі
+    }
+    return 1; // ззовні
+  }
+
   double d1 = cross(A, B, P);
   double d2 = cross(B, C, P);
   double d3 = cross(C, A, P);
 
-  if (fabs(d1) < 1e-9 || fabs(d2) < 1e-9 || fabs(d3) < 1e-9)
+  if (fabs(d1) < 1e-9 || fabs(d2) < 1e-9 || fabs(d3) < 1e-9) {
     return 0;
+  }
 
-  if (d1 > 0 && d2 > 0 && d3 > 0)
-    // на межі
-    return 2;
+  if (d1 > 0 && d2 > 0 && d3 > 0) {
+    return 2; // на межі
+  }
 
-  if (d1 < 0 && d2 < 0 && d3 < 0)
-    // всередині
-    return 0;
+  if (d1 < 0 && d2 < 0 && d3 < 0) {
+    return 0; // всередині
+  }
 
   // на межі
   return 1;

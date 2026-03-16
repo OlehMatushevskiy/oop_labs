@@ -17,7 +17,15 @@ struct Triangle {
   // 0 - всередині,
   // 1 - ззовні,
   // 2 - на межі трикутника
+
   int checkPointPosition(const Point &P) const;
+
+  // 0 - всередині
+  // 1 - ззовні
+  // 2 - на межі трикутника
+
+  int checkPointPosition1(const Point &P) const;
 };
 
+double cross(const Point &A, const Point &B, const Point &P);
 double heronArea(const Triangle &t);

@@ -10,7 +10,6 @@ int main()
     dyh->setVolumes(0.4, 1.0);
     dyh->setTolerance(0.0001);
 
-    // Шукаємо корінь методом дихотомії.
     if (dyh->countDyhotomia(x_dyhotomia) == 0)
     {
         std::cout << "Method Dyhotomia: x = " << x_dyhotomia << std::endl;
@@ -20,7 +19,6 @@ int main()
         std::cout << "Method Dyhotomia: no root on this interval" << std::endl;
     }
 
-    // Шукаємо корінь методом Ньютона.
     if (dyh->countNewton(x_newton) == 0)
     {
         std::cout << "Method Newton:    x = " << x_newton << std::endl;

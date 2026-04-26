@@ -1,5 +1,4 @@
-#ifndef LAB1_H
-#define LAB1_H
+#pragma once
 
 struct money {
   int grn;
@@ -10,6 +9,4 @@ void sum(money *a, money b);
 void multi(money *m, int n);
 
 void round(money *m);
-void parseLines(const char *file_name);
-
-#endif
+void parseLines(char *file_name);

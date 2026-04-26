@@ -5,13 +5,16 @@
 using namespace std;
 
 void sum(money *a, money b) {
-
   int total_kop = (a->grn + b.grn) * 100 + a->kop + b.kop;
   a->grn = total_kop / 100;
   a->kop = total_kop % 100;
 }
 
 void multi(money *m, int n) {
+
+  if (n < 0) {
+    return;
+  }
 
   int total_kop = (m->grn * 100 + m->kop) * n;
   m->grn = total_kop / 100;
@@ -37,59 +40,29 @@ void round(money *m) {
   }
 }
 
-void parseLines(const char *file_name) {
-
+void parseLines(char *file_name) {
   FILE *f = fopen(file_name, "r");
-
-  if (f == NULL) {
-    cout << "Could not open file" << endl;
+  if (!f) {
+    cout << "Error: Could not open file" << endl;
     return;
   }
 
-  char buffer[256];
-  int grn;
-  short int kop;
-  int quantity;
-  char item[256];
+  char itemName[256];
+  int g, k, q;
+  money totalAmount = {0, 0};
 
-  money total_money = {0, 0};
+  while (fscanf(f, "%255s %d %d %d", itemName, &g, &k, &q) == 4) {
+    if (g < 0 || k < 0 || q < 0)
+      continue;
 
-  while (fgets(buffer, sizeof(buffer), f)) {
-
-    quantity = 1;
-    int parseItemsCount =
-        sscanf(buffer, "%255s %d %hd %d", item, &grn, &kop, &quantity);
-
-    if (parseItemsCount >= 3) {
-
-      if (quantity < 0 || grn < 0 || kop < 0) {
-        cout << "Incorrect format of input" << endl;
-        fclose(f);
-        return;
-      }
-
-      money m = {grn, kop};
-
-      if (quantity > 1) {
-        multi(&m, quantity);
-      }
-
-      cout << item << " " << grn << " grn, " << kop << " kop, " << quantity
-           << "x" << endl;
-
-      sum(&total_money, m);
-    }
+    money itemPrice = {g, (short int)k};
+    multi(&itemPrice, q);
+    sum(&totalAmount, itemPrice);
   }
 
   fclose(f);
 
-  cout << endl
-       << "sum not round: { grn: " << total_money.grn
-       << ", kop: " << total_money.kop << " }" << endl;
-
-  round(&total_money);
-
-  cout << endl
-       << "Full receipt amount: { grn: " << total_money.grn
-       << ", kop: " << total_money.kop << " }" << endl;
+  round(&totalAmount);
+  cout << "Full receipt amount: { grn: " << totalAmount.grn
+       << ", kop: " << totalAmount.kop << " }" << endl;
 }

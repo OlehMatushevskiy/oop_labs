@@ -16,7 +16,7 @@ public:
 
   int SetBrand(string b);
   int SetSpeed(int s);
-  int SetSpeed(int minSpeed, int maxSpeed);
+  short int SetSpeed(short int minSpeed, short int maxSpeed);
 
   virtual void ShowInfo() const;
   virtual void Move() const;
